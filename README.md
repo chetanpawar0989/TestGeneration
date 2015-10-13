@@ -1,6 +1,6 @@
 ## Test Generation
 
-#Code coverage:
+### Code coverage:
 - Statements   : 100% ( 185/185 )
 - Branches     : 100% ( 30/30 )
 - Functions    : 100% ( 6/6 )
