@@ -96,15 +96,23 @@ function generateTestCases()
 			params[paramName] = [];
 			if (paramName == "phoneNumber") 
 			{
-				var fakeNumber = faker.phone.phoneNumber();
-				params[paramName].push('\'' + fakeNumber + '\'');
+				var fakeNumber = '';
 				params[paramName].push('\'\'');
 				if (areaCode) {
+					//add one fake phone starting with area code
 					fakeNumber = faker.phone.phoneNumber(areaCode + ".###.####");
+					params[paramName].push('\'' + fakeNumber + '\'');
+					//add one fake phone not starting with area code
+					do {
+						fakeNumber = faker.phone.phoneNumber();
+					} while (fakeNumber.indexOf(areaCode) == 0);
+					params[paramName].push('\'' + fakeNumber + '\'');
+				}
+				else {
+					fakeNumber = faker.phone.phoneNumber();
 					params[paramName].push('\'' + fakeNumber + '\'');
 				}
 			}
-			//params[paramName].push('\'\'');
 		}
 
 		//console.log( params );
@@ -126,7 +134,7 @@ function generateTestCases()
 				params[constraint.ident].push(constraint.value);
 			}
 		}
-		console.log("\nFor function " + funcName + ":");
+		//console.log("\nFor function " + funcName + ":");
 		var allPossibleValues = [];
 		// adding default value for params with no constraints
 		for (var i =0; i < functionConstraints[funcName].params.length; i++ )
@@ -136,11 +144,11 @@ function generateTestCases()
 			if (params[paramName].length == 0)
 				params[paramName].push('\'\'');
 			allPossibleValues.push(_.uniq(params[paramName]));
-			console.log("param: " + paramName + " Values: " + _.uniq(params[paramName]));
+			//console.log("param: " + paramName + " Values: " + _.uniq(params[paramName]));
 		}
 		
 		var cartesianProd = cartesianProductOf(allPossibleValues);
-		console.log("cartesianProd length:" + cartesianProd.length);
+		//console.log("cartesianProd length:" + cartesianProd.length);
 		for (var i = 0; i < cartesianProd.length; i++) 
 		{
 			var args = Object.keys(cartesianProd[i]).map( 
